@@ -4,11 +4,14 @@
 	"version": "0.0.0",
 	"main": "src/index.js",
 	"devDependencies": {
+		"mocha": "latest",
+		"chai": "latest",
 		"babel": "latest",
 		"babelify": "latest",
 		"browserify": "latest"
 	},
 	"scripts": {
-		"build": "browserify src/A.js -t [babelify --modules system] -o dist/out.js"
+		"build": "browserify src/A.js -t [babelify --modules system] -o dist/out.js",
+		"test": "mocha --require babelhook test"
 	}
 }
