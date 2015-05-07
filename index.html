@@ -1,9 +1,42 @@
 <script src="lib/system.src.js"></script>
-<script src="dist/out.js"></script>
 <script>
-	debugger;
-	System.import('./A').then(function(A) {
-	debugger;
-		console.log(new A().value());
+System.register("foo", [], function(_export) {
+	var __moduleName = "foo";
+	
+	function foo(str) {
+		return str + '!';
+	}
+	return {
+		setters: [function (m) {
+		}],
+		execute: function () {
+			_export("default", foo);
+		}
+	};
+});
+
+System.register("bar", ["foo"], function (_export) {
+	"use strict";
+
+	var __moduleName = "bar";
+
+	var foo;
+	function bar() {
+		return foo("foobar");
+	}
+	return {
+		setters: [function (m) {
+			foo = m.default;
+		}],
+		execute: function () {
+			_export("bar", bar);
+		}
+	};
+});
+</script>
+<script>
+	System.import('bar').then(function(module) {
+		var bar = module.bar;
+		console.log(bar());
 	});
 </script>
