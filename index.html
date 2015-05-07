@@ -1,0 +1,9 @@
+<script src="lib/system.src.js"></script>
+<script src="dist/out.js"></script>
+<script>
+	debugger;
+	System.import('./A').then(function(A) {
+	debugger;
+		console.log(new A().value());
+	});
+</script>

@@ -1,0 +1,14 @@
+{
+	"name": "es6-module-loader-spike",
+	"author": "Dominic Chambers",
+	"version": "0.0.0",
+	"main": "src/index.js",
+	"devDependencies": {
+		"babel": "latest",
+		"babelify": "latest",
+		"browserify": "latest"
+	},
+	"scripts": {
+		"build": "browserify src/A.js -t [babelify --modules system] -o dist/out.js"
+	}
+}
