@@ -1,7 +1,6 @@
-<script src="lib/system.src.js"></script>
-<script>
-System.register("foo", [], function(_export) {
-	var __moduleName = "foo";
+<script src='lib/system.src.js'></script>
+function _foo(_export) {
+	var __moduleName = 'foo';
 	
 	function foo(str) {
 		return str + '!';
@@ -10,55 +9,50 @@ System.register("foo", [], function(_export) {
 		setters: [function (m) {
 		}],
 		execute: function () {
-			_export("default", foo);
+			_export('default', foo);
 		}
 	};
-});
+}
 
-System.register("bar", ["foo"], function(_export) {
-	"use strict";
+function _bar(_export) {
+	'use strict';
 
-	var __moduleName = "bar";
+	var __moduleName = 'bar';
 
 	var foo;
 	function bar() {
-		return foo("foobar");
+		return foo('foobar');
 	}
 	return {
 		setters: [function (m) {
 			foo = m.default;
 		}],
 		execute: function () {
-			_export("bar", bar);
+			_export('bar', bar);
 		}
 	};
-});
-
-System.import('bar').then(function(module) {
-	var bar = module.bar;
-	console.log(bar()); // Note: displays 'foobar!'
-	doFooReplacementTest();
-});
-
-function doFooReplacementTest() {
-	// replace 'foo' and verify it's been replaced
-	System.set('foo', System.newModule({default: function foo(str) {
-		return str + '?';
-	}}));
-	
-	System.import('foo').then(function(module) {
-		var foo = module.default;
-		console.log(foo('hello')); // Note: displays 'hello?'
-	});
-	
-	
-	// replace 'bar' and verify that it uses the new 'foo'
-	System.set('bar', System.newModule(System.get('bar')));
-	// System.set('bar', System.newModule({bar: System.get('bar').bar}));
-	
-	System.import('bar').then(function(module) {
-		var bar = module.bar;
-		console.log(bar()); // Note: displays 'foobar!' rather than 'foobar?' as desired
-	});
 }
+
+// Register modules for the first time
+System.register('foo', [], _foo);
+System.register('bar', ['foo'], _bar);
+
+// import 'bar'
+System.import('bar').then(function(module) {
+	console.log(module.bar());
+	
+	// delete all modules
+	System.delete('foo');
+	System.delete('bar');
+	
+	// Register exactly the same modules a subsequent time
+	System.register('foo', [], _foo);
+	System.register('bar', ['foo'], _bar);
+	
+	// import 'bar' again (ERROR!)
+	System.import('bar').then(function(module) {
+		console.log(module.bar());
+	});
+});
+<script>
 </script>
