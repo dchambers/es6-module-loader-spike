@@ -15,7 +15,7 @@ System.register("foo", [], function(_export) {
 	};
 });
 
-System.register("bar", ["foo"], function (_export) {
+System.register("bar", ["foo"], function(_export) {
 	"use strict";
 
 	var __moduleName = "bar";
@@ -33,10 +33,32 @@ System.register("bar", ["foo"], function (_export) {
 		}
 	};
 });
-</script>
-<script>
+
+System.import('bar').then(function(module) {
+	var bar = module.bar;
+	console.log(bar()); // Note: displays 'foobar!'
+	doFooReplacementTest();
+});
+
+function doFooReplacementTest() {
+	// replace 'foo' and verify it's been replaced
+	System.set('foo', System.newModule({default: function foo(str) {
+		return str + '?';
+	}}));
+	
+	System.import('foo').then(function(module) {
+		var foo = module.default;
+		console.log(foo('hello')); // Note: displays 'hello?'
+	});
+	
+	
+	// replace 'bar' and verify that it uses the new 'foo'
+	System.set('bar', System.newModule(System.get('bar')));
+	// System.set('bar', System.newModule({bar: System.get('bar').bar}));
+	
 	System.import('bar').then(function(module) {
 		var bar = module.bar;
-		console.log(bar());
+		console.log(bar()); // Note: displays 'foobar!' rather than 'foobar?' as desired
 	});
+}
 </script>
