@@ -46,9 +46,10 @@ System.import('bar').then(function(module) {
 	System.delete('foo');
 	System.delete('bar');
 	
+debugger;
 	// Register exactly the same modules a subsequent time
-	System.register('foo', [], _foo);
-	System.register('bar', ['foo'], _bar);
+	System.define('foo', "function(str) { return str + '!'; }");
+	System.define('bar', "function() { var foo = System.get('foo'); return foo('foobar'); }");
 	
 	// import 'bar' again (ERROR!)
 	System.import('bar').then(function(module) {
