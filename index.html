@@ -1,19 +1,24 @@
 <script src='lib/system.src.js'></script>
 <script>
-function _foo(_export) {
-	var __moduleName = 'foo';
-	
-	function foo(str) {
-		return str + '!';
-	}
-	return {
-		setters: [function (m) {
-		}],
-		execute: function () {
-			_export('default', foo);
-		}
+function createRegisterFunc(name, func) {
+	return function(_export) {
+		return {
+			setters: [function (m) {
+			}],
+			execute: function () {
+				_export(name, func);
+			}
+		};
 	};
 }
+
+var _foo = createRegisterFunc('default', function foo(str) {
+	return str + '!';
+})
+
+var _updatedFoo = createRegisterFunc('default', function foo(str) {
+	return str + '?';
+})
 
 function _bar(_export) {
 	'use strict';
@@ -41,17 +46,16 @@ System.register('bar', ['foo'], _bar);
 // import 'bar'
 System.import('bar').then(function(module) {
 	console.log(module.bar());
-	
+
 	// delete all modules
 	System.delete('foo');
 	System.delete('bar');
-	
-debugger;
-	// Register exactly the same modules a subsequent time
-	System.define('foo', "function(str) { return str + '!'; }");
-	System.define('bar', "function() { var foo = System.get('foo'); return foo('foobar'); }");
-	
-	// import 'bar' again (ERROR!)
+
+	// Register a new 'foo' module the second time around
+	System.register('foo', [], _updatedFoo);
+	System.register('bar', ['foo'], _bar);
+
+	// import 'bar' again
 	System.import('bar').then(function(module) {
 		console.log(module.bar());
 	});
