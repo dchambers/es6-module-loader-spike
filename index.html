@@ -1,9 +1,8 @@
-<script src="lib/system.src.js"></script>
-<script src="dist/out.js"></script>
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
 <script>
-	debugger;
-	System.import('./A').then(function(A) {
-	debugger;
+	System.import('src/A').then(function(module) {
+		var A = module.default;
 		console.log(new A().value());
 	});
 </script>

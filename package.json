@@ -1,14 +1,23 @@
 {
-	"name": "es6-module-loader-spike",
-	"author": "Dominic Chambers",
-	"version": "0.0.0",
-	"main": "src/index.js",
-	"devDependencies": {
-		"babel": "latest",
-		"babelify": "latest",
-		"browserify": "latest"
-	},
-	"scripts": {
-		"build": "browserify src/A.js -t [babelify --modules system --moduleIds true] -o dist/out.js"
-	}
+  "name": "es6-module-loader-spike",
+  "author": "Dominic Chambers",
+  "version": "0.0.0",
+  "main": "src/index.js",
+  "devDependencies": {
+    "jspm": "latest"
+  },
+  "scripts": {
+    "build": "jspm bundle src/A --inject"
+  },
+  "jspm": {
+    "directories": {},
+    "dependencies": {
+      "babel": "npm:babel-core@^5.4.3"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.1.13",
+      "babel-runtime": "npm:babel-runtime@^5.1.13",
+      "core-js": "npm:core-js@^0.9.4"
+    }
+  }
 }
