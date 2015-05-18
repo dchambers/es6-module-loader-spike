@@ -1,33 +1,25 @@
 <script src="jspm_packages/system.js"></script>
 <script src="config.js"></script>
 <script>
+	var modules = {};
+	var systemRegister = System.register.bind(System);
+
+	System.register = function(name, deps, declare, execute) {
+		modules[name] = {deps:deps, declare:declare, execute:execute};
+		return systemRegister(name, deps, declare, execute);
+	};
+
+	System.reregister = function(name) {
+		this.delete(name);
+		this.register(name, modules[name].deps, modules[name].declare, modules[name].execute);
+	};
+</script>
+<script>
 	System.import('src/A').then(function(module) {
 		var A = module.default;
 		console.log(new A().value());
 
-		System.delete('src/A');
-		System.delete('src/B');
-		System.register('src/A', ['src/B'], function _bar(_export) {
-			'use strict';
-
-			var B;
-
-			function A() {
-			}
-
-			A.prototype.value = function() {
-				return B.value;
-			};
-
-			return {
-				setters: [function (m) {
-					B = m.default;
-				}],
-				execute: function () {
-					_export('default', A);
-				}
-			};
-		});
+		System.delete('src/B'); // dependent on e2b9440, which is not yet available in a released version of SystemJS
 		System.register('src/B', [], function _bar(_export) {
 			'use strict';
 
@@ -43,6 +35,10 @@
 				}
 			};
 		});
+
+		// dependent on commenting out this line of code:
+		//   <https://github.com/systemjs/systemjs/blob/master/dist/system.src.js#L744>
+		System.reregister('src/A');
 
 		System.import('src/A').then(function(module) {
 			var A = module.default;
