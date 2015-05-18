@@ -9,6 +9,6 @@
 		"browserify": "latest"
 	},
 	"scripts": {
-		"build": "browserify src/A.js -t [babelify --modules system] -o dist/out.js"
+		"build": "browserify src/A.js -t [babelify --modules system --moduleIds true] -o dist/out.js"
 	}
 }
