@@ -36,6 +36,9 @@
 			};
 		});
 
+		// Note: this does the same thing as the System.register() above
+		// System.set('src/B', System.newModule({default:{value:'alternate-value'}}));
+
 		// dependent on commenting out this line of code (which does not occur until SystemJS 0.17.0):
 		//   <https://github.com/systemjs/systemjs/blob/0.16.11/dist/system.src.js#L744>
 		System.reregister('src/A');
